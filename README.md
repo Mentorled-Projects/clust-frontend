@@ -42,9 +42,9 @@ Clust simplifies group event planning by combining RSVPs, content sharing, and f
 >>> Feedback Form: Simple, customizable form to collect attendee feedback.
 
 
-## Target Audience
+# Target Audience
 
-### Primary Users
+## Primary Users
 
 #### Organizer:
 The Organizer is responsible for creating and managing events within a group. They handle event setup, track RSVPs, share materials, and collect feedback to ensure smooth planning and execution.
@@ -52,15 +52,21 @@ The Organizer is responsible for creating and managing events within a group. Th
 #### Attendee:
 The Attendee is a participant invited to join events. Their role is to RSVP, stay updated with event details, access shared content, and provide feedback after attending.
 
-#### User Persona
+### User Persona
 
 #### Primary User
- Name: Sandra Akintoye
- Role: Community Coordinator / Event Host (e.g., club leader, team lead, group admin)
- Age: 29
- Location: Lagos, Nigeria
- Tech Comfort: Intermediate
- Tools She Uses: WhatsApp, Google Forms, Canva, Trello
+ >>> Name: Sandra Akintoye
+
+ >>> Role: Community Coordinator / Event Host (e.g., club leader, team lead, group admin)
+
+ >>> Age: 29
+
+ >>> Location: Lagos, Nigeria
+
+ >>> Tech Comfort: Intermediate
+
+ >>> Tools She Uses: WhatsApp, Google Forms, Canva, Trello
+
 
 ### Pain Points:
 
@@ -97,10 +103,15 @@ The Attendee is a participant invited to join events. Their role is to RSVP, sta
 
 ### Secondary User 
  Name: David Umeh
+
  Role: Group Member / Event Participant
+
  Age: 24
+
  Location: Abuja, Nigeria
+
  Tech Comfort: Basic
+
  Tools He Uses: WhatsApp, Instagram, Email
 
 ### Pain Points:
@@ -112,7 +123,7 @@ The Attendee is a participant invited to join events. Their role is to RSVP, sta
 >>> Has no clear way to give feedback after attending
 
 
-### Goals:
+### Project Goals:
 
 >>> RSVP to events quickly and get reminders
 
@@ -135,12 +146,156 @@ The Attendee is a participant invited to join events. Their role is to RSVP, sta
  Frontend
 
  >>> Next.js (App Router) - Framework for API routes, routing and rendering 
+
  >>> TypeScript - Static typing for scalable development
+
  >>> Tailwind CSS - Utility-first styling
+
  >>> Lucide icons - Easy-access UI components
- >>>
+
+ >>> React Hook Form + zod – Form handling and validation
+
+ >>> Axios – HTTP client for API requests
 
 
+
+ ### Design Flow
+
+>>> Drawing is to go here
+
+
+
+ ## MVP Scope (Minimum Viable Product)
+ The MVP for Clust will focus on delivering the core functionality that allows small groups and communities to create and manage events with ease.
+
+ ### MVP Inclusions
+
+>>> User Registration and Login (Organizer + Attendee)
+
+
+>>> Group Creation
+
+
+>>> Event Creation
+
+
+>>> RSVP System
+
+
+>>> File Uploads (e.g. PDFs, images)
+
+
+>>> Post-Event Feedback Form
+
+
+>>> Basic Notifications (e.g., RSVP confirmation/reminder)
+
+
+>>> Secure Data Storage (JWT, HTTPS)
+
+
+
+ ### Backend 
+ 
+  (Python) 
+ 
+ ### Database
+ 
+  (PostgreSQL or MongoDB)
+
+## DevOps
+
+>>> Vercel - Frontend deployment
+
+>>> GitHub Action - CI/CD pipelines
+
+
+
+
+## Project Structure
+Clust/
+├── app/                     # App Router structure
+│   ├── (landing)/           # Landing page group
+│   │   ├── page.tsx         # Homepage          
+│   │   └── layout.tsx       # Landing page layout with header/footer
+│   ├── auth/                # Authentication routes
+│   │   ├── login/           # Login page
+│   │   ├── signup/          # Signup page
+│   │   └── reset-password/  # Password reset flow
+│   ├── admin/               # Admin portal (protected)
+│   │   ├── dashboard/       # Dashboard home
+│   │   ├── resources/       # Resource management
+│   │   ├── team/            # Team management
+│   │   └── layout.tsx       # Admin layout with sidebar
+│   ├── member/              # Team member portal (protected)
+│   │   ├── check-in/        # Weekly check-in
+│   │   ├── journal/         # Mood journal
+│   │   ├── resources/       # View resources
+│   │   └── layout.tsx       # Member layout
+│   ├── api/                 # API routes
+│   │   ├── auth/            # Auth endpoints
+│   │   ├── admin/           # Admin endpoints
+│   │   └── member/          # Member endpoints
+│   └── layout.tsx           # Root layout
+├── components/              # Shared UI components
+├── lib/                     # Utility functions, API clients
+├── hooks/                   # Custom React hooks
+├── providers/               # Context providers
+├── types/                   # TypeScript interfaces, enums, and types
+│   ├── auth.ts              # Login/signup-related types
+│   ├── user.ts              # User and admin types
+│   ├── mood.ts              # Mood, energy, check-in types
+│   ├── journal.ts           # Mood journal entry types
+│   └── resource.ts          # Wellness resource types
+└── public/                  # Static assets
+
+
+### Project Timeline
+
+
+## Getting Started
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+
+Open http://localhost:3000 with your browser to see the result.
+
+You can start editing the page by modifying app/page.tsx. The page 
+auto-updates as you edit the file.
+
+This project uses next/font to automatically optimize and load Geist, a new font family for Vercel.
+
+## Build Command
+npm run build
+
+## Run Lint/Format
+npm run lint
+npm run format
+
+## Deploy on Vercel
+The easiest way to deploy your Next.js app is to use the Vercel Platform from the creators of Next.js.
+
+Check out our Next.js deployment documentation for more details.
+
+## Contributors
+
+### Team Tend
+
+>>> Project Manager: ONAOLA OMOLORI [Team Member]
+
+>>> Product Lead: ABIGAIL AKHIGBE [Team Member]
+
+>>> UI/UX: Ehalodu: OLUWAPELUMI ASHABI [Team Member]
+
+>>> Frontend Engineer: IFEOMA EZEOKOLI [Team Member]
+
+>>> Backend Engineer: AKINROGUNDE OMOMIJOLA [Team Member]
+
+>>> Software Tester: TOSIN [Team Member]
 
 
 
