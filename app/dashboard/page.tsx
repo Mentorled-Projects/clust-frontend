@@ -70,7 +70,7 @@ export default function Dashboard() {
            {/** function to navigate to the RSVP section */}
   const handleRSVPClick = (eventName: string) => {
     setShowNotifications(false)
-    router.push("/create-event")
+    router.push("dashboard/create-event")
            }
 
 
@@ -301,7 +301,7 @@ export default function Dashboard() {
                     Kindly Confirm your attendance.
                   </p>
                 </div>
-                <button  className="bg-[#EBF8FE] hover:bg-blue-700 text-[9px] text-black px-5 py-2 rounded-full transition-colors duration-200 font-medium"
+                <button  className="bg-[#EBF8FE]  text-[9px] text-black px-5 py-2 rounded-full transition-colors duration-200 font-medium"
                   onClick={() => handleRSVPClick("Music live concert")}>
                   RSVP NOW
                 </button>
