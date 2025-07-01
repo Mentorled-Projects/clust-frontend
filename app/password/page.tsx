@@ -1,17 +1,12 @@
 
 
-
-
 "use client"
-
-
-
 import { useState } from "react";
 import { Eye, EyeOff, CheckCircle, XCircle } from 'lucide-react';
 import React from "react";
-import { useRouter } from 'next/navigation';
 import  Image  from 'next/image'
-import { signupUser } from "../../utils/api";
+import axios from "axios"
+import router from "next/router";
 
 
 
@@ -23,14 +18,58 @@ export default function SignupForm(){
     const [showConfirmPassword, setshowConfirmpassword] = useState(false);
     
     
+    
+
+       /*function createPost(){
+        axios
+        .post("http://188.166.174.141:8000/api/v1/auth/signup",{
+            password: "",
+            confirmPassword: "",        
+        })
+        .then(res => console.log(res.data))
+        .catch(err => console.error(err))
+       }
+
+        const stored = JSON.parse(localStorage.getItem("signupData") || "{}");
+
+await axios.post("http://188.166.174.141:8000/api/v1/auth/signup", {
+  email: stored.email,
+  firstName: stored.firstName,
+  lastName: stored.lastName,
+  password,
+  confirmPassword,
+});*/
+
+
+              const createPost = async () => {
+  try {
+   const stored = JSON.parse(localStorage.getItem("signupData") || "{}");
+
+    const response = await axios.post("http://188.166.174.141:8000/api/v1/auth/signup", {
+      email: stored.email,
+      first_name: stored.firstName,
+      last_name: stored.lastName,
+      password,
+      password_verify: confirmPassword,
+    });
+
+   
+    console.log("Signup success:", response.data);
+    localStorage.removeItem("signupData"); // optional cleanup
+    router.push("/success"); // or next page
+  } catch (error) {
+    console.error("Signup failed:", error);
+  }
+};
+
+
+
+
 
     const isPasswordValid = password.length >= 8;
     const doPasswordsMatch = password && confirmPassword && password === confirmPassword;
 
-    const router = useRouter()
-const handleContinue = () => {
-    router.push('/signup/password')
-}
+  
 
 return(
     <div className="flex h-screen  ">
@@ -47,7 +86,7 @@ return(
 
 
         {/**the signup form side */}
-        <div className=" h-full w-[50%]  flex items-center justify-center">
+        <div className=" h-[100%] w-[50%]  flex items-center justify-center">
             <div className="w-full max-w-md">
                 <h1 className="text-3xl mb- font-bold  text-[#1A202C]">Create an account</h1>
                 <p className="text-sm font-thin mb-5   text-[#2C3442]">Join us now and start planning effortlessly</p>
@@ -96,13 +135,13 @@ return(
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => setConfirmPassword(e.target.value)}  //this is where the error is coming from
                   className={`w-full mt-2 border text-xs px-3 py-2 rounded focus:outline-none ${confirmPassword.length === 0 ? 'border-[#E6E5E5]' : doPasswordsMatch ? 'focus:border-[#98D9FC]': 'border-[#2F2B36] focus:border-red-500'
                   }`}
                   />
 
                   <button onClick={() => setshowConfirmpassword(!showConfirmPassword)} className="absolute right-3 top-9">
-                    {showConfirmPassword ? <EyeOff size={16}/> : <Eye size={20} />}
+                    {showConfirmPassword ? <EyeOff size={16}/> : <Eye size={18} />}
                   </button>
                   {!doPasswordsMatch && confirmPassword.length > 0 && (
                     <p className="text-red-500 mt-2">Passwords do not match</p>
@@ -111,7 +150,7 @@ return(
 
              {/** continue button */}
              <button
-           onClick={handleContinue}
+           onClick={createPost}
            className={`w-full py-2 text-xs rounded mt-5 text-white ${password || confirmPassword  ? 'bg-[#0794E2]' : 'bg-[#E6E5E5]'}`}>
            Continue
            </button>
@@ -162,6 +201,15 @@ return(
            
        
 }
+
+
+
+
+   
+
+
+
+
 
 
 

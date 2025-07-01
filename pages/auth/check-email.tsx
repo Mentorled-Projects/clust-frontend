@@ -1,34 +1,15 @@
 
 
+
 'use client';
 
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from "axios";
-import React from "react";
-
-const baseURL = "http://188.166.174.141:8000/api/v1/auth/reset-email"
-
 
 export default function ForgotPassword() {
   const router = useRouter();
   const [code, setCode] = useState(['', '', '', '', '']);
   const [timer, setTimer] = useState(20);
-  const [ post, setPost] = React.useState(null)
-
-  React.useEffect (() => {
-    axios.get(`${baseURL}/1`).then((response) => {
-      setPost(response.data);
-    });
-  }, [])
-
-  function createPost() {
-    axios
-    .post(baseURL, {
-      first_name: "string",
-      
-    })
-  }
 
   {/** for the countdown logic*/}
   useEffect(() => {

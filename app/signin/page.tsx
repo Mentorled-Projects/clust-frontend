@@ -25,7 +25,7 @@ export default function SignInPage() {
   const handleLogin = async () => {
     setError("");
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/http://188.166.174.141:8000/api/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -38,10 +38,10 @@ export default function SignInPage() {
         }
         router.push("/dashboard");
       } else {
-        setError("Credentials do not match our records");
+        // setError("Credentials do not match our records");
       }
     } catch (err) {
-      setError("Something went wrong. Try again later.");
+      // setError("Something went wrong. Try again later.");
     }
   };
 
