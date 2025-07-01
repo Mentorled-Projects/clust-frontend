@@ -44,3 +44,27 @@ export  const categories = [
     { status: "Confirmed", statusColor: "bg-green-500", image: "/image/Image (4).png" },
     { status: "Pending", statusColor: "bg-yellow-400", image: "/image/Image (5).png" },
   ];
+
+  export   const faqData = [
+    {
+      id: 1,
+      question: "What time does the concert start?",
+      answer: "Gates open at 4:00PM, and the first act hits the stage by 6:00PM",
+    },
+    {
+      id: 2,
+      question: "What time does the concert start?",
+      answer: "Gates open at 4:00PM, and the first act hits the stage by 6:00PM",
+    },
+    {
+      id: 3,
+      question: "What time does the concert start?",
+      answer: "Gates open at 4:00PM, and the first act hits the stage by 6:00PM",
+    },
+    {
+        id: 4,
+      question: "What time does the concert start?",
+      answer: "Gates open at 4:00PM, and the first act hits the stage by 6:00PM",
+    },
+    
+  ]
