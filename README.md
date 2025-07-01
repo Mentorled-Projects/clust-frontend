@@ -214,46 +214,17 @@ The Attendee is a participant invited to join events. Their role is to RSVP, sta
 
 ## Project Structure
 Clust/
-├── app/                     # App Router structure
-│   ├── (landing)/           # Landing page group
-│   │   ├── page.tsx         # Homepage          
-│   │   └── layout.tsx       # Landing page layout with header/footer
-│   ├── auth/                # Authentication routes
-│   │   ├── login/           # Login page
-│   │   ├── signup/          # Signup page
-│   │   └── reset-password/  # Password reset flow
-│   ├── admin/               # Admin portal (protected)
-│   │   ├── dashboard/       # Dashboard home
-│   │   ├── resources/       # Resource management
-│   │   ├── team/            # Team management
-│   │   └── layout.tsx       # Admin layout with sidebar
-│   ├── member/              # Team member portal (protected)
-│   │   ├── check-in/        # Weekly check-in
-│   │   ├── journal/         # Mood journal
-│   │   ├── resources/       # View resources
-│   │   └── layout.tsx       # Member layout
-│   ├── api/                 # API routes
-│   │   ├── auth/            # Auth endpoints
-│   │   ├── admin/           # Admin endpoints
-│   │   └── member/          # Member endpoints
-│   └── layout.tsx           # Root layout
-├── components/              # Shared UI components
-├── lib/                     # Utility functions, API clients
-├── hooks/                   # Custom React hooks
-├── providers/               # Context providers
-├── types/                   # TypeScript interfaces, enums, and types
-│   ├── auth.ts              # Login/signup-related types
-│   ├── user.ts              # User and admin types
-│   ├── mood.ts              # Mood, energy, check-in types
-│   ├── journal.ts           # Mood journal entry types
-│   └── resource.ts          # Wellness resource types
-└── public/                  # Static assets
+
 
 
 ### Project Timeline
 
 
 ## Getting Started
+
+First, run the development server
+
+```bash
 npm run dev
 # or
 yarn dev
@@ -261,6 +232,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
 
 Open http://localhost:3000 with your browser to see the result.
 
