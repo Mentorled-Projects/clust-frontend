@@ -24,7 +24,7 @@ import { FaUserCircle } from "react-icons/fa"
 import { FiPlus, FiBell, FiChevronDown, FiMapPin, FiSearch } from "react-icons/fi"
 
 export default function EventPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false) // Default closed on mobile
+  const [sidebarOpen, setSidebarOpen] = useState(false) 
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
@@ -659,3 +659,8 @@ function NavItem({ icon, label, sidebarOpen, onClick }) {
     </div>
   )
 }
+
+
+
+
+
