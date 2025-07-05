@@ -45,7 +45,7 @@ export  const categories = [
     { status: "Pending", statusColor: "bg-yellow-400", image: "/image/Image (5).png" },
   ];
 
-  export   const faqData = [
+  export const faqData = [
     {
       id: 1,
       question: "What time does the concert start?",
@@ -68,3 +68,34 @@ export  const categories = [
     },
     
   ]
+
+
+   export const categoriesDetails = ["Reading", 
+    "Technology", 
+    "Outdoor", 
+    "Fitness", 
+    "Photography", 
+    "Wellness",
+    "Gaming"]
+    
+   
+  
+
+
+    export const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+
+
+  
