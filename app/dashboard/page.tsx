@@ -35,6 +35,7 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false)
   const [showOrganizerModal, setShowOrganizerModal] = useState(false)
+  const [eventDetails, setEventDetails] = useState(false)
   const toggleModal = () => {
     document.body.style.overflow = "hidden"
     setShowOrganizerModal(!showOrganizerModal)
@@ -51,12 +52,7 @@ export default function Dashboard() {
     const updatedLikes = [...likedEvents];
     updatedLikes[index] = !updatedLikes[index];
     setLikedEvents(updatedLikes);
-  };
-
- 
-
-
- 
+  }; 
 
     const currentIndex = 0;
 
@@ -80,6 +76,13 @@ export default function Dashboard() {
     router.push("/tickets")
            }
 
+
+           
+           {/** function to create an event */}
+  const handleEventDetailsClick = (eventName: string) => {
+    setEventDetails(false)
+    router.push("dashboard/event-details")
+           }
 
 
   return (
@@ -185,9 +188,8 @@ export default function Dashboard() {
             </ul>
 
             <button
-              className="w-[55%] rounded-md bg-[#1BAAF8] mb-8 hover:bg-blue-700 text-white py-2"
-              onClick={toggleModal}
-            >
+              className="w-[55%] rounded-md bg-[#1BAAF8] mb-8 text-white py-2"
+              onClick={() => handleEventDetailsClick("/app/dashboard/create-event")}            >
               Continue
             </button>
           </div>
@@ -212,7 +214,7 @@ export default function Dashboard() {
 
                 </div>
                 <button
-                  className="text-blue-600 text-xl font-medium hover:text-blue-700"
+                  className="text-black text-xl font-medium hover:text-blue-700"
                   onClick={() => {
                   }}
                 >
@@ -302,7 +304,7 @@ export default function Dashboard() {
                   </p>
                 </div>
                 <button  className="bg-[#EBF8FE]  text-[9px] text-black px-5 py-2 rounded-full transition-colors duration-200 font-medium"
-                  onClick={() => handleRSVPClick("Music live concert")}>
+                  onClick={() => handleRSVPClick("/app/dashboard/create-event")}>
                   RSVP NOW
                 </button>
               </div>
