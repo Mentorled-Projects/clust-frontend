@@ -36,6 +36,11 @@ export default function EventPage() {
   const [showOrganizerModal, setShowOrganizerModal] = useState(false)
   const [openFAQs, setOpenFAQs] = useState({})
 
+  const toggleModal = () => {
+    document.body.style.overflow = "hidden"
+    setShowOrganizerModal(!showOrganizerModal)
+  }
+
 
   // responsiveness
   useEffect(() => {
@@ -164,7 +169,7 @@ export default function EventPage() {
           <div className="flex items-center gap-2 sm:gap-4 ml-auto">
             {/* for the create event button */}
             <button
-              onClick={() => setShowOrganizerModal(true)}
+              onClick={toggleModal}
               className="bg-[#1BAAF8] text-white text-xs px-2 sm:px-3 py-2 rounded-sm flex items-center gap-1 sm:gap-2"
             >
               <FiPlus className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -178,13 +183,12 @@ export default function EventPage() {
               <span className="absolute -top-2 -right-2 text-xs bg-red-500 text-white rounded-full px-1">3</span>
             </div>
 
-              {/* Organizer Modal */}
       {showOrganizerModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[rgba(0,0,0,0.5)] w-full bg-opacity" onClick={() => setShowOrganizerModal(false)}></div>
+          <div className="absolute bg-[rgba(0,0,0,0.5)] w-full bg-opacity-50 inset-0" onClick={toggleModal}></div>
           <div className="relative bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full text-center">
             <button
-              onClick={() => setShowOrganizerModal(false)}
+              onClick={toggleModal}
               className="absolute top-3 sm:top-4 right-3 sm:right-4 text-gray-400 hover:text-gray-600"
             >
               <X className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -220,7 +224,6 @@ export default function EventPage() {
               className="w-full sm:w-[55%] rounded-md bg-[#1BAAF8] hover:bg-blue-700 text-white py-2 text-sm sm:text-base"
               onClick={() => {
                 setShowOrganizerModal(false)
-                console.log("Navigate to event creation page")
               }}
             >
               Continue
@@ -268,7 +271,7 @@ export default function EventPage() {
           {/* for the hero image */}
           <section
             className="bg-cover bg-center rounded-lg h-60 sm:h-160 lg:h-130 mb-6 sm:mb-8 relative"
-            style={{ backgroundImage: 'url("/image/Frame 2147225246.png")' }}
+            style={{ backgroundImage: 'url("/image/Frame 2147225246 (1).png")' }}
           >
             <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-5 space-y-1 sm:space-y-2">
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold">Music Live Concert</h1>
