@@ -42,7 +42,6 @@ export default function EventPage() {
   }
 
 
-  // responsiveness
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768)
@@ -520,7 +519,6 @@ export default function EventPage() {
           {/* Footer */}
           <footer className="bg-[#231F20] text-white px-3 sm:px-6 py-6 sm:py-10 mt-8 sm:mt-12">
             <div className="max-w-7xl mx-auto flex flex-col gap-6 sm:gap-8 lg:flex-row lg:justify-between lg:gap-10">
-              {/* Column 1 */}
               <div className="lg:w-1/4">
                 <a href="./" className="inline-block mb-3 sm:mb-4">
                   <Image
@@ -536,7 +534,6 @@ export default function EventPage() {
                 </p>
               </div>
 
-              {/* Columns 2-4 */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:w-3/4">
                 <div>
                   <h2 className="text-sm sm:text-base font-semibold mb-2">Services</h2>
