@@ -17,6 +17,7 @@ export default function SignupForm() {
   const isEmailValid = signUpState.email.includes("@");
   const isFirstNameValid = signUpState.first_name.trim() !== "";
   const isLastNameValid = signUpState.last_name.trim() !== "";
+  const [response, setResponse] = useState(null)
   const doPasswordsMatch =
     signUpState.password &&
     signUpState.password === signUpState.password_verify;
@@ -56,17 +57,19 @@ export default function SignupForm() {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Signup success:", data);
+          setResponse(data)
+          // console.log("Signup success:", data);
 
-          router.push("/verify-email");
+          // router.push("/verify-email");
         })
         .catch((err) => {
-          console.error("Signup error:", err);
+          // console.error("Signup error:", err);
           setError("Signup failed. Please try again.");
         });
     }
   };
-
+  
+  console.log(response)
   useEffect(() => {
     const script = document.createElement("script")
     script.src = "https://accounts.google.com/gsi/client";
