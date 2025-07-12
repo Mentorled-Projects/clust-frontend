@@ -1,11 +1,11 @@
 
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { CheckCircle, Crown, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { categories, events, rsvpEvents, moreEvents, discover } from "../assets/data";
-
+import axios from "axios"
 import {
   Menu,
   X,
@@ -32,11 +32,14 @@ import { FiPlus, FiBell, FiChevronDown, FiMapPin, FiSearch } from "react-icons/f
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [likedEvents, setLikedEvents] = useState(Array(6).fill(false));
+  //const [likedEvents, setLikedEvents] = useState(Array(6).fill(false));
+  const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false)
   const [showOrganizerModal, setShowOrganizerModal] = useState(false)
   const [eventDetails, setEventDetails] = useState(false)
+  const [likedEvents, setLikedEvents] = useState(Array(events.length).fill(false));
+
   const toggleModal = () => {
     document.body.style.overflow = "hidden"
     setShowOrganizerModal(!showOrganizerModal)
@@ -49,11 +52,7 @@ export default function Dashboard() {
   }
 
   const router = useRouter();
-  const toggleLike = (index) => {
-    const updatedLikes = [...likedEvents];
-    updatedLikes[index] = !updatedLikes[index];
-    setLikedEvents(updatedLikes);
-  }; 
+  
 
     const currentIndex = 0;
 
@@ -86,9 +85,34 @@ export default function Dashboard() {
            }
 
 
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    location: "",
+    start_time: "",
+    end_time: "",
+  });
+
+  const toggleLike = (index: number) => {
+    const updated = [...likedEvents];
+    updated[index] = !updated[index];
+    setLikedEvents(updated);
+  };
+
+  const handleCreateEvent = async () => {   //for create event
+    try {
+      const response = await axios.post("http://188.166.174.141:8000/api/v1/events/Create Events", formData);
+      console.log("Event Created:", response.data);
+      alert("Event created successfully!");
+    } catch (error: any) {
+      console.error("Create event failed:", error.response?.data || error.message);
+    }
+  };
+
+
   return (
     <>
-    <div className="flex h-screen overflow-hidden bg-black  text-white">
+    <div className="flex  overflow-hidden   text-white">
       <aside
         className={`bg-[#222124] fixed top-0 left-0 z-20 bg-opacity-50  transition-all duration-300 h-screen ${sidebarOpen ? "w-1/5" : "w-20"} p-4`}
       >
@@ -469,7 +493,102 @@ export default function Dashboard() {
           </div>
 
 
-          {/* Popular Events */}
+          {/* Popular Events */} for the end point
+
+          {/* <section>
+      <h3 className="text-xl font-bold mb-1 text-[#0A033C]">Popular events</h3>
+      <p className="text-xs text-[#222124] mb-4">Events Happening Near You</p>
+      <div className="bg-white p-4 rounded shadow mb-8">
+        <h2 className="text-lg font-semibold mb-2">Create New Event</h2>
+        <input
+          type="text"
+          placeholder="Title"
+          className="border p-2 mb-2 w-full"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Description"
+          className="border p-2 mb-2 w-full"
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="Location"
+          className="border p-2 mb-2 w-full"
+          value={formData.location}
+          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+        />
+        <input
+          type="datetime-local"
+          className="border p-2 mb-2 w-full"
+          value={formData.start_time}
+          onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
+        />
+        <input
+          type="datetime-local"
+          className="border p-2 mb-2 w-full"
+          value={formData.end_time}
+          onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
+        />
+        <button onClick={handleCreateEvent} className="bg-blue-500 text-white px-4 py-2 rounded">
+          Create Event
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {events.map((item, i) => (
+          <div key={i} className="bg-white border-[#252C2B] p-5 rounded-lg">
+            <div className="relative">
+              <Image
+                src={item.icon}
+                width={400}
+                height={200}
+                className="w-[95%] h-40 object-cover rounded-lg"
+                alt={item.label}
+              />
+              <div className="absolute top-2 right-6 flex gap-2">
+                <button className="bg-white p-1 rounded-full">
+                  <Download size={14} className="text-black" />
+                </button>
+                <button
+                  className={`p-1 rounded-full transition ${
+                    likedEvents[i] ? "bg-red-100" : "bg-white"
+                  }`}
+                  onClick={() => toggleLike(i)}
+                >
+                  <Heart
+                    size={14}
+                    className={
+                      likedEvents[i]
+                        ? "text-red-500 fill-red-500"
+                        : "text-black"
+                    }
+                  />
+                </button>
+              </div>
+            </div>
+            <h2 className="mt-3 text-[#252C2B] font-bold text-lg">{item.label}</h2>
+            <div className="flex text-[#626262] items-center text-sm gap-1">
+              <Clock size={14} />
+              26th January 2025 · 9:00pm
+            </div>
+            <div className="flex text-[#626262] items-center text-sm gap-1">
+              <MapPin size={14} />
+              Wave beach
+            </div>
+            <h2 className="text-[#1BAAF8] font-semibold text-sm mt-1">Free</h2>
+            <button className="w-[95%] text-sm border border-[#E6E5E5] text-[#252C2B] rounded-full py-2 hover:bg-[#1BAAF8] transition mt-2">
+              Join Event
+            </button>
+          </div>
+        ))}
+      </div>
+    </section> */}
+ 
+
           <section>
             <h3 className="text-xl font-bold mb-1 text-[#0A033C]">Popular events</h3>
             <p className="text-xs text-[#222124] mb-4">
@@ -519,7 +638,7 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-          </section>
+          // </section> 
 
           {/**Discover Groups  */}
           <section className="mt-12">
@@ -569,19 +688,19 @@ export default function Dashboard() {
 
           {/**Upcoming rsvp events */}
           <section className="mt-12">
-            <div className="w-full px-6 py-8 bg-gray-900 text-white">
+            <div className="w-full px-8 py-8 bg-white text-white">
               <div className="flex flex-wrap gap-6 justify-center">
                 {rsvpEvents.map((rsvpEvent, i) => (
-                  <div key={i} className="bg-gray-800 rounded-lg w-[500px] p-4 flex gap-4 items-start">
+                  <div key={i} className=" rounded-lg w-[500px] p-4 flex gap-4 items-start">
                     {/* Image Section */}
-                    <div className="relative w-[140px] h-[100px] flex-shrink-0">
+                    <div className="relative w-[45%] h-[150px] flex-shrink-0">
                       <Image
                         src={rsvpEvent.image}
                         fill
                         className="rounded-lg object-cover"
                         alt="event image" />
                       <button
-                        className={`absolute top-1 left-2 text-[10px] text-white px-2 rounded-full ${rsvpEvent.statusColor} ${rsvpEvent.textColor}`}
+                        className={`absolute top-2 py-0.9 left-2 text-[10px] text-white px-3 rounded-full ${rsvpEvent.statusColor} ${rsvpEvent.textColor}`}
                       >
                         {rsvpEvent.status}
                       </button>
@@ -628,22 +747,22 @@ export default function Dashboard() {
 
 
           {/** More Events */}
-          <section className="mt-12">
-            <h3 className="text-xl text-[#0A033C] font-bold mb-1">Popular events</h3>
-            <p className="text-xs text-[#626262] mb-4">
+          <section className="mb-20">
+            <h3 className="text-xl text-[#0A033C] font-bold mb-1">More events</h3>
+            <p className="text-xs text-[#222124] mb-4">
               Events Happening Near You
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {moreEvents.map((item, i) => (
-                <div key={i} className="bg-gray-800 p-3 rounded-lg">
+                <div key={i} className="bg- p-5 rounded-lg">
                   <div className="relative">
                     <Image
                       src={item.icon}
                       width={400}
                       height={200}
-                      className="w-full h-32 object-cover rounded-md"
+                      className="w-[95%] h-40 object-cover rounded-lg"
                       alt={item.label} />
-                    <div className="absolute top-2 right-2 flex gap-2">
+                    <div className="absolute top-2 right-6 flex gap-2">
                       <button className="bg-white p-1 rounded-full">
                         <Download size={14} className="text-black" />
                       </button>
@@ -671,7 +790,7 @@ export default function Dashboard() {
                   <h2 className="text-[#1BAAF8] font-semibold text-sm mt-1">
                     Free
                   </h2>
-                  <button className="w-full border border-white text-[#252C2B] text-xs rounded-full py-1 hover:bg-blue-600 transition mt-2">
+                  <button className="w-[95%] border border-[#E6E5E5] text-[#252C2B] text-sm rounded-full py-2 hover:bg-blue-600 transition mt-2">
                     Join Event
                   </button>
                 </div>
@@ -680,7 +799,7 @@ export default function Dashboard() {
           </section>
 
           {/**for the footer part */}
-          <footer className="bg-[#231F20] text-white px-6 py-10">
+          <footer className="bg-[#231F20] h-[50vh] text-white px-10 py-10">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10 ">
               {/* for column 1 */}
               <div className="md:w-1/4">
