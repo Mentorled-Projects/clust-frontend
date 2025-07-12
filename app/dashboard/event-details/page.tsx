@@ -1,10 +1,11 @@
 "use client"
 
+import type React from "react"
+import type { ChangeEvent, KeyboardEvent } from "react"
+
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { categoriesDetails, months } from "../../assets/data"
-
 import {
   Menu,
   X,
@@ -23,6 +24,14 @@ import {
   Bell,
   User,
 } from "lucide-react"
+import type { JSX } from "react/jsx-runtime"
+
+interface UploadedFile {
+  id: number
+  name: string
+  size: string
+  type: string
+}
 
 export default function EventDetailsPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -30,10 +39,6 @@ export default function EventDetailsPage() {
   const [showNotifications, setShowNotifications] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const router = useRouter()
-  const [selectedDate, setSelectedDate] = useState(17)
-  const [selectedMonth, setSelectedMonth] = useState(4) 
-  const [selectedYear, setSelectedYear] = useState(2025)
-  const [showMonthDropdown, setShowMonthDropdown] = useState(false)
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -47,9 +52,10 @@ export default function EventDetailsPage() {
   const [address, setAddress] = useState("")
   const [showMap, setShowMap] = useState(false)
   const [guestEmail, setGuestEmail] = useState("")
-  const [guestList, setGuestList] = useState([])
-  const [uploadedFiles, setUploadedFiles] = useState([])
+  const [guestList, setGuestList] = useState<string[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [dragActive, setDragActive] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   const [titleFocused, setTitleFocused] = useState(false)
   const [descriptionFocused, setDescriptionFocused] = useState(false)
@@ -57,9 +63,10 @@ export default function EventDetailsPage() {
   const [addressFocused, setAddressFocused] = useState(false)
   const [guestEmailFocused, setGuestEmailFocused] = useState(false)
 
-  const fileInputRef = useRef(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const eventImageInputRef = useRef<HTMLInputElement>(null)
 
- 
+  const categories = ["Reading", "Technology", "Outdoor", "Fitness", "Photography", "Wellness", "Gaming"]
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -71,7 +78,7 @@ export default function EventDetailsPage() {
     return () => window.removeEventListener("resize", checkScreenSize)
   }, [])
 
-  const handleDrag = (e) => {
+  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
     if (e.type === "dragenter" || e.type === "dragover") {
@@ -81,19 +88,38 @@ export default function EventDetailsPage() {
     }
   }
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
     setDragActive(false)
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      console.log("File dropped:", e.dataTransfer.files[0])
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(e.dataTransfer.files)
+      const imageFile = droppedFiles.find((file) => file.type.startsWith("image/"))
+
+      if (imageFile) {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          setSelectedImage(event.target?.result as string)
+        }
+        reader.readAsDataURL(imageFile)
+      }
     }
   }
 
-  const handleFileSelect = (e) => {
+  const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const newFiles = Array.from(e.target.files).map((file, index) => ({
+      const file = e.target.files[0]
+
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          setSelectedImage(event.target?.result as string)
+        }
+        reader.readAsDataURL(file)
+      }
+
+      const newFiles: UploadedFile[] = Array.from(e.target.files).map((file, index) => ({
         id: Date.now() + index,
         name: file.name,
         size: (file.size / (1024 * 1024)).toFixed(1) + "MB",
@@ -104,21 +130,30 @@ export default function EventDetailsPage() {
   }
 
   const addGuest = () => {
-    if (guestEmail.trim() && !guestList.includes(guestEmail.trim())) {
-      setGuestList([...guestList, guestEmail.trim()])
+    if (guestEmail.trim()) {
+      if (!guestList.includes(guestEmail.trim())) {
+        setGuestList([...guestList, guestEmail.trim()])
+      }
       setGuestEmail("")
     }
   }
 
-  const removeGuest = (email) => {
+  const handleGuestEmailKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault()
+      addGuest()
+    }
+  }
+
+  const removeGuest = (email: string) => {
     setGuestList(guestList.filter((guest) => guest !== email))
   }
 
-  const removeFile = (fileId) => {
+  const removeFile = (fileId: number) => {
     setUploadedFiles(uploadedFiles.filter((file) => file.id !== fileId))
   }
 
-  const handleCategorySelect = (selectedCategory) => {
+  const handleCategorySelect = (selectedCategory: string) => {
     setCategory(selectedCategory)
     setShowCategoryDropdown(false)
   }
@@ -127,22 +162,41 @@ export default function EventDetailsPage() {
     setShowNotifications(!showNotifications)
   }
 
+  const [selectedDate, setSelectedDate] = useState(17)
+  const [selectedMonth, setSelectedMonth] = useState(4) // May = 4 (0-indexed)
+  const [selectedYear, setSelectedYear] = useState(2025)
+  const [showMonthDropdown, setShowMonthDropdown] = useState(false)
 
-    const getDaysInMonth = (month, year) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+
+  const getDaysInMonth = (month: number, year: number): number => {
     return new Date(year, month + 1, 0).getDate()
   }
 
-  const getFirstDayOfMonth = (month, year) => {
+  const getFirstDayOfMonth = (month: number, year: number): number => {
     const firstDay = new Date(year, month, 1).getDay()
-    return firstDay === 0 ? 6 : firstDay - 1 // Convert Sunday (0) to 6, Monday (1) to 0, etc.
+    return firstDay === 0 ? 6 : firstDay - 1
   }
 
-  const isWeekend = (date, month, year) => {
+  const isWeekend = (date: number, month: number, year: number): boolean => {
     const day = new Date(year, month, date).getDay()
-    return day === 0 || day === 6 // Sunday or Saturday
+    return day === 0 || day === 6
   }
 
-  const isPastDate = (date, month, year) => {
+  const isPastDate = (date: number, month: number, year: number): boolean => {
     const today = new Date()
     const checkDate = new Date(year, month, date)
     today.setHours(0, 0, 0, 0)
@@ -150,28 +204,26 @@ export default function EventDetailsPage() {
     return checkDate < today
   }
 
-  const handleDateSelect = (date) => {
+  const handleDateSelect = (date: number) => {
     setSelectedDate(date)
     setDate(`${date} ${months[selectedMonth]}, ${selectedYear}`)
     setShowCalendar(false)
   }
 
-  const handleMonthSelect = (monthIndex) => {
+  const handleMonthSelect = (monthIndex: number) => {
     setSelectedMonth(monthIndex)
     setShowMonthDropdown(false)
   }
 
-  const renderCalendar = () => {
+  const renderCalendar = (): JSX.Element[] => {
     const daysInMonth = getDaysInMonth(selectedMonth, selectedYear)
     const firstDay = getFirstDayOfMonth(selectedMonth, selectedYear)
-    const days = []
+    const days: JSX.Element[] = []
 
-    // Add empty cells for days before the first day of the month
     for (let i = 0; i < firstDay; i++) {
       days.push(<div key={`empty-${i}`} className="w-8 h-8"></div>)
     }
 
-    // Add days of the month
     for (let date = 1; date <= daysInMonth; date++) {
       const isSelected = date === selectedDate
       const isWeekendDay = isWeekend(date, selectedMonth, selectedYear)
@@ -179,7 +231,7 @@ export default function EventDetailsPage() {
 
       days.push(
         <div
-          key={date}
+          key={`date-${date}`}
           onClick={() => handleDateSelect(date)}
           className={`w-8 h-8 flex items-center justify-center text-sm cursor-pointer rounded-full transition-colors ${
             isSelected
@@ -192,25 +244,51 @@ export default function EventDetailsPage() {
           }`}
         >
           {date}
-        </div>
+        </div>,
       )
     }
 
     return days
   }
 
+  const handleBrowseClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleEventImageSelect = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          setSelectedImage(event.target?.result as string)
+        }
+        reader.readAsDataURL(file)
+      }
+    }
+  }
+
+  const handleEventImageBrowseClick = () => {
+    eventImageInputRef.current?.click()
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 text-gray-900">
-      {/* Mobile Overlay */}
       {sidebarOpen && isMobile && (
-        <div className="fixed inset-0 bg-[#222124] bg-opacity-50 z-10 lg:hidden" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* Collapsed Sidebar */}
       <aside className={`bg-black fixed top-0 left-0 z-20 transition-all duration-300 h-screen w-20 overflow-hidden`}>
         <div className="p-4">
           <div className="flex items-center justify-center mb-6">
-            <Image src="/image/Frame 2147224772.svg" alt="Clust-logo" width={32} height={32} />
+         <Image
+  src={selectedImage || "/placeholder.svg"}
+  alt="Selected preview"
+  width={300} 
+  height={200} 
+  className="rounded-md object-cover"
+/>
           </div>
           <hr className="border-gray-700 mb-4" />
           <nav className="space-y-4">
@@ -254,7 +332,6 @@ export default function EventDetailsPage() {
               <span className="absolute -top-2 -right-2 text-xs bg-red-500 text-white rounded-full px-1">3</span>
             </div>
 
-            {/* User Dropdown */}
             <div className="flex items-center gap-1 sm:gap-2 relative">
               <div className="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
                 <User className="w-4 h-4 text-white" />
@@ -290,32 +367,57 @@ export default function EventDetailsPage() {
           </div>
         </nav>
 
-        {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <div className="max-w-4xl mx-auto">
-            {/* Header */}
             <div className="mb-6">
-              <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-2">Create Event</h3>
+              <h3 className="text-sm sm:text-[20px] font-bold text-gray-900 mb-2">Create Event</h3>
               <p className="text-gray-600 text-xs">Fill in the details about your event</p>
             </div>
 
-            {/* Form */}
             <div className="space-y-6">
-              {/* Event Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Event Image</label>
+                <input
+                  type="file"
+                  ref={eventImageInputRef}
+                  onChange={handleEventImageSelect}
+                  accept="image/*"
+                  className="hidden"
+                />
                 <div
-                  className={`border-2 w-[30%] h-[200px] border-dashed rounded-lg p-12 text-center transition-colors ${
-                    dragActive ? "border-blue-400 bg-blue-50" : "border-gray-300"
+                  className={`border-2 w-[30%] h-[200px] border-dashed rounded-lg p-12 text-center transition-colors cursor-pointer ${
+                    dragActive ? "border-blue-400 bg-blue-50" : "border-gray-300 hover:border-gray-400"
                   }`}
                   onDragEnter={handleDrag}
                   onDragLeave={handleDrag}
                   onDragOver={handleDrag}
                   onDrop={handleDrop}
+                  onClick={handleEventImageBrowseClick}
                 >
-                  <Upload className="w-5 h-5 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-gray-600 text-xs mb-2">Drag & drop to upload</h3>
-                  <h3 className="text-blue-500 text-xs cursor-pointer hover:text-blue-600">or browse</h3>
+                  {selectedImage ? (
+                    <div className="relative">
+                      <Image
+                        src={selectedImage || "/placeholder.svg"}
+                        alt="Event preview"
+                        className="max-w-full max-h-48 mx-auto rounded-lg object-cover"
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setSelectedImage(null)
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <Upload className="w-5 h-5 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-600 text-xs mb-2">Drag & drop to upload</p>
+                      <p className="text-blue-500 text-xs cursor-pointer hover:text-blue-600">or browse</p>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -370,13 +472,13 @@ export default function EventDetailsPage() {
                     }`}
                   />
                   <ChevronDown
-                    className="absolute text-xs right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 cursor-pointer"
                     onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
                   />
                 </div>
                 {showCategoryDropdown && (
                   <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg z-10 mt-1">
-                    {categoriesDetails.map((cat) => (
+                    {categories.map((cat) => (
                       <div
                         key={cat}
                         className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
@@ -389,17 +491,8 @@ export default function EventDetailsPage() {
                 )}
               </div>
 
-
-
-
-
-
-
-
-              
-
               {/* Date and Time */}
-<div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative">
@@ -411,7 +504,7 @@ export default function EventDetailsPage() {
                       readOnly
                     />
                     <div
-                      className="absolute right-15 top-1/2 transform -translate-y-1/2 bg-[#EBF8FE] p-1 rounded cursor-pointer"
+                      className="absolute right-15 top-1/2 transform -translate-y-1/2 cursor-pointer"
                       onClick={() => setShowCalendar(!showCalendar)}
                     >
                       <Calendar className="w-4 h-4 text-gray-400" />
@@ -422,13 +515,13 @@ export default function EventDetailsPage() {
                           <div className="relative">
                             <button
                               onClick={() => setShowMonthDropdown(!showMonthDropdown)}
-                              className="flex items-center gap-2 text-xs font-semibold text-gray-900 hover:text-blue-600"
+                              className="flex items-center gap-2 text-lg font-semibold text-gray-900 hover:text-blue-600"
                             >
                               {months[selectedMonth]} {selectedYear}
                               <ChevronDown className="w-4 h-4" />
                             </button>
                             {showMonthDropdown && (
-                              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-30 max-h-98 overflow-y-auto">
+                              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-30 max-h-48 overflow-y-auto">
                                 {months.map((month, index) => (
                                   <div
                                     key={month}
@@ -459,7 +552,7 @@ export default function EventDetailsPage() {
                             </div>
                           ))}
                         </div>
-                        <div className="grid grid-cols-7 ">{renderCalendar()}</div>
+                        <div className="grid grid-cols-7 gap-1">{renderCalendar()}</div>
                       </div>
                     )}
                   </div>
@@ -486,13 +579,10 @@ export default function EventDetailsPage() {
                 </div>
               </div>
 
-           
-
               {/* Location */}
               <div>
-                <label className="block  text-sm font-medium text-gray-700 mb-4">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-4">Location</label>
 
-                {/* Physical Location */}
                 <div className="space-y-4">
                   <label className="flex items-center">
                     <input
@@ -541,7 +631,7 @@ export default function EventDetailsPage() {
                         <div className="bg-gray-100 p-4 rounded-lg">
                           <div className="w-full">
                             <Image
-                              src="/image/Rectangle%204911.png"
+                              src="/lagos-map.png"
                               alt="Lagos Map"
                               width={600}
                               height={200}
@@ -552,7 +642,6 @@ export default function EventDetailsPage() {
                       )}
                     </div>
                   )}
-
 
                   {/* Virtual Location */}
                   <label className="flex items-center">
@@ -570,23 +659,37 @@ export default function EventDetailsPage() {
               </div>
 
               {/* Add Guest */}
-                  <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Add guest</h3>
+              <div>
+                <h3 className="text-[16px] font-medium text-gray-900 mb-4">Add guest</h3>
+                {guestList.length > 0 && (
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-gray-600">
+                      {guestList.length} guest{guestList.length !== 1 ? "s" : ""} added
+                    </p>
+                    <button
+                      onClick={() => setGuestList([])}
+                      className="text-xs text-red-500 hover:text-red-700 cursor-pointer"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                )}
                 <div className="relative mb-4">
                   <input
                     type="email"
                     placeholder="Email Invitation"
                     value={guestEmail}
                     onChange={(e) => setGuestEmail(e.target.value)}
+                    onKeyPress={handleGuestEmailKeyPress}
                     onFocus={() => setGuestEmailFocused(true)}
                     onBlur={() => setGuestEmailFocused(false)}
-                    className={`w-full px-3 py-3 pr-20 text-xs border rounded-lg focus:outline-none transition-colors ${
+                    className={`w-full text-xs px-2 py-3 pr-20 border rounded-lg focus:outline-none transition-colors ${
                       guestEmailFocused ? "border-blue-500" : "border-gray-300"
                     }`}
                   />
                   <button
                     onClick={addGuest}
-                    className={`absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 rounded text-sm transition-colors ${
+                    className={`absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 rounded text-xs transition-colors ${
                       guestEmail.trim()
                         ? "bg-blue-500 text-white"
                         : "text-blue-500 bg-transparent border border-blue-500"
@@ -596,14 +699,17 @@ export default function EventDetailsPage() {
                   </button>
                 </div>
 
-                {/* Guest List */}
+                {/* Guest List - Enhanced Flex Layout */}
                 {guestList.length > 0 && (
                   <div className="flex flex-wrap gap-3">
                     {guestList.map((email, index) => (
-                      <div key={index} className="flex items-center w-[25%] justify-between bg-gray-100 px-3 py-2 rounded-lg">
-                        <span className="text-xs">{email}</span>
+                      <div
+                        key={index}
+                        className="flex items-center bg-blue-50 border border-blue-200 px-3 py-2 rounded-full"
+                      >
+                        <span className="text-sm text-blue-800 mr-2">{email}</span>
                         <X
-                          className="w-4 h-4 text-gray-400 cursor-pointer hover:text-red-500"
+                          className="w-4 h-4 text-blue-600 cursor-pointer hover:text-red-500 transition-colors"
                           onClick={() => removeGuest(email)}
                         />
                       </div>
@@ -652,16 +758,16 @@ export default function EventDetailsPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col justify-between sm:flex-row gap-3 pt-6">
+              <div className="flex flex-col justify-between sm:flex-row gap-4 pt-6">
                 <button
                   onClick={() => router.push("/dashboard")}
-                  className="px-6 py-2 text-xs border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-6 text-xs py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Back
                 </button>
                 <button
-                  onClick={() => router.push("/dashboard/create-event")}
-                  className="px-6 py-2 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  onClick={() => router.push("/dashboard/create-tickets")}
+                  className="px-6 py-2 text-xs  bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                 >
                   Create Event
                 </button>
@@ -711,7 +817,7 @@ export default function EventDetailsPage() {
   )
 }
 
-function NavItem({ icon }) {
+function NavItem({ icon }: { icon: React.ReactNode }) {
   return (
     <div className="flex items-center justify-center hover:bg-gray-800 p-3 rounded-md cursor-pointer">
       <div className="text-white w-5 h-5">{icon}</div>
