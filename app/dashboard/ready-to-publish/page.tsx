@@ -1,10 +1,10 @@
 
 'use client';
 
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Calendar, MapPin, Lock, Users, Upload, Trash2, Loader2, Plus, User } from 'lucide-react';
+import { Calendar, MapPin, Lock, Trash2, Loader2, Plus, User } from 'lucide-react';
 
 export default function PublishEventPage() {
   const router = useRouter();
