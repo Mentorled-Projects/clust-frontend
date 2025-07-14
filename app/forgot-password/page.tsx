@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
     setMessage('');
-
+   //http://188.166.174.141:8000/api/v1/auth/forgot-password   the endpoint for forgot-password
     try {
       await sendPasswordResetEmail(email);
       setMessage('If the email exists, a reset link has been sent.');
