@@ -638,7 +638,7 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-          // </section> 
+          </section> 
 
           {/**Discover Groups  */}
           <section className="mt-12">
