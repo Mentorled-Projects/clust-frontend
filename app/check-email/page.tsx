@@ -79,6 +79,7 @@ export default function ForgotPassword() {
                 className={`w-15 h-15 text-center rounded-xl border font-semibold text-xl outline-none transition-colors ${
                   digit ? 'border-[#98D9FC]' : 'border-[#D8DADC]'
                 }`}
+                
               />
             ))}
           </div>
