@@ -111,7 +111,7 @@ export default function CateoryPage(){
 
    {/** the category selection part */}
    <div className="text-center mt-20 ">
-       <h2 className="text-xl font-bold mb-2 text-[#000000]">Pick one or more categories <br/> you're interested in</h2>
+       <h2 className="text-xl font-bold mb-2 text-[#000000]">Pick one or more categories <br/> you&apos;re interested in</h2>
         <p className="text-[#000000] text-xs mb-6">Get connected to events and communities that match your vibe.</p>
    
    <div className="flex flex-wrap w-[30%] justify-center gap-6 mb-6 max-w-4xl mx-auto">
