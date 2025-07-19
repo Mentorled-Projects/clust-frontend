@@ -348,11 +348,11 @@ export default function EventDetailsPage() {
           <hr className="border-gray-700 mb-2" />
           <nav className="space-y-4">
             <NavItem icon={<Image src={"/image/DashboardMobile.svg"} width={100} height={100} alt="Dashboard"/>} />
-            <NavItem icon={<Image src={"/image/calendarMobile.svg"} width={100} height={100} alt="Dashboard" />} />
-            <NavItem icon={<Image src={"/image/profile-2userMobile.svg"} width={100} height={100} alt="Dashboard" />} />
-            <NavItem icon={<Image src={"/image/timerMobile.svg"} width={100} height={100} alt="Dashboard" />} />
-            <NavItem icon={<Image src={"/image/settingMobile.svg"} width={100} height={100} alt="Dashboard" />} />
-            <NavItem icon={<Image src={"/image/message-questionMobile.svg"} width={100} height={100} alt="Dashboard" />} />
+            <NavItem icon={<Image src={"/image/calendarMobile.svg"} width={100} height={100} alt="Events" />} />
+            <NavItem icon={<Image src={"/image/profile-2userMobile.svg"} width={100} height={100} alt="Groups" />} />
+            <NavItem icon={<Image src={"/image/timerMobile.svg"} width={100} height={100} alt="RSVP" />} />
+            <NavItem icon={<Image src={"/image/settingMobile.svg"} width={100} height={100} alt="Settings" />} />
+            <NavItem icon={<Image src={"/image/message-questionMobile.svg"} width={100} height={100} alt="Help" />} />
           </nav>
         </div>
       </aside>
@@ -560,7 +560,7 @@ export default function EventDetailsPage() {
                                 <div className="flex-1">
                                   <p className="text-sm text-gray-700 mb-4">
                                     <span className="font-bold">John,</span> you have been invited to{" "}
-                                    <span className="font-bold">&quot;Music live concert"</span> secure
+                                    <span className="font-bold">&quot;Music live concert&quot;</span> secure
                                     <br />
                                     <span>your spot now!</span>
                                   </p>
@@ -606,8 +606,8 @@ export default function EventDetailsPage() {
                                 <div className="flex-1">
                                   <p className=" text-gray-700 text-sm mb-4">
                                     <span className="font-bold ">John,</span> your rsvp to{" "}
-                                    <span className="font-bold">"Summer
-                                      Beach Brunch"</span> is still pending.
+                                    <span className="font-bold">&quot;Summer
+                                      Beach Brunch&quot;</span> is still pending.
                                     <br />
                                     Kindly Confirm your attendance.
                                   </p>
@@ -628,7 +628,7 @@ export default function EventDetailsPage() {
                                 <div className="flex-1 ">
                                   <p className=" text-gray-700 text-sm mb-4">
                                     <span className="font-bold">John,</span> you have been invited to{" "}
-                                    <span className="font-bold">"Fitness Fest 2025"
+                                    <span className="font-bold">&quot;Fitness Fest 2025&quot;
                                     </span> secure
                                     <br />
                                     <span>  your spot now!</span>
@@ -671,7 +671,7 @@ export default function EventDetailsPage() {
                                 <div className="flex-1">
                                   <p className=" text-gray-700 text-sm mb-1 ">
                                     <span className="font-bold">John,</span> your rsvp to{" "}
-                                    <span className="font-bold">"Summer Beach Brunch"</span> is still pending.
+                                    <span className="font-bold">&quot;Summer Beach Brunch&quot;</span> is still pending.
                                     <br />
                                     Kindly Confirm your attendance.
                                   </p>
@@ -1025,7 +1025,7 @@ export default function EventDetailsPage() {
                         <div className="bg-gray-100 p-4 rounded-lg">
                           <div className="w-full">
                             <Image
-                              src="/lagos-map.png"
+                              src="/image/lagos-map.png"
                               alt="Lagos Map"
                               width={600}
                               height={200}
