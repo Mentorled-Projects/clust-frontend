@@ -243,7 +243,7 @@ export default function NavbarDesktop() {
                   <div className="flex-1">
                     <p className="text-sm text-gray-700 mb-4">
                       <span className="font-bold">John,</span> you have been invited to{" "}
-                      <span className="font-bold">&quot;Music live concert"</span> secure
+                      <span className="font-bold">&quot;Music live concert&quot;</span> secure
                       <br />
                       <span>your spot now!</span>
                     </p>
@@ -289,8 +289,8 @@ export default function NavbarDesktop() {
                   <div className="flex-1">
                     <p className=" text-gray-700 text-sm mb-4">
                       <span className="font-bold ">John,</span> your rsvp to{" "}
-                      <span className="font-bold">"Summer 
-                        Beach Brunch"</span> is still pending.
+                      <span className="font-bold">&quot;Summer 
+                        Beach Brunch&quot;</span> is still pending.
                       <br />
                       Kindly Confirm your attendance.
                     </p>
@@ -311,7 +311,7 @@ export default function NavbarDesktop() {
                   <div className="flex-1 ">
                     <p className=" text-gray-700 text-sm mb-4">
                       <span className="font-bold">John,</span> you have been invited to{" "}
-                      <span className="font-bold">"Fitness Fest 2025"
+                      <span className="font-bold">&quot;Fitness Fest 2025&quot;
                         </span> secure 
                         <br/>
                         <span>  your spot now!</span> 
@@ -354,7 +354,7 @@ export default function NavbarDesktop() {
                   <div className="flex-1">
                     <p className=" text-gray-700 text-sm mb-1">
                       <span className="font-bold">John,</span> your rsvp to{" "}
-                      <span className="font-bold">"Summer Beach Brunch"</span> is still pending.
+                      <span className="font-bold">&quot;Summer Beach Brunch&quot;</span> is still pending.
                       <br />
                       Kindly Confirm your attendance.
                     </p>
