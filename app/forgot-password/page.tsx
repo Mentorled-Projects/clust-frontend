@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
       >
         <h2 className="text-lg mt-6  font-bold">Forgot password?</h2>
         <p className="text-gray-600 w-[95%] text-xs ">
-          Don't worry! It happens. Please enter the email associated with your account.
+          Don&apos;t worry! It happens. Please enter the email associated with your account.
         </p>
 
         <div>
