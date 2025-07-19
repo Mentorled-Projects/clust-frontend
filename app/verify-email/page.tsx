@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -12,16 +10,28 @@ export default function VerifyEmailPage() {
   const router = useRouter();
   const [otp, setOtp] = useState(Array(5).fill(""));
   const [activeIndex, setActiveIndex] = useState(0);
-  const [email] = useState(() => localStorage.getItem("userEmail") || "");
+  // const [email] = useState(() => localStorage.getItem("userEmail") || "");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
+
+  const [email, setEmail] = useState("");
+
+useEffect(() => {
+  const storedEmail = localStorage.getItem("userEmail");
+  if (storedEmail) {
+    setEmail(storedEmail);
+  }
+}, []);
   useEffect(() => {
     inputRefs.current[activeIndex]?.focus();
   }, [activeIndex]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     const val = e.target.value;
     if (/^[0-9]?$/.test(val)) {
       const newOtp = [...otp];
@@ -33,7 +43,10 @@ export default function VerifyEmailPage() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       setActiveIndex(index - 1);
     }
@@ -82,62 +95,63 @@ export default function VerifyEmailPage() {
         >
           Back
         </p>
-                  <div className="flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-2">Verify your email address</h1>
-        <p className="mb-14 font-thin text-xs text-gray-700 max-w-xs">
-          We've sent an OTP with an activation code to your email{" "}
-          <span className="font-thin">{email}</span>
-        </p>
+        <div className="flex flex-col items-center">
+          <h1 className="text-2xl font-bold mb-2">Verify your email address</h1>
+          <p className="mb-14 font-thin text-xs text-gray-700 max-w-xs">
+            We&apos;ve sent an OTP with an activation code to your email{" "}
+            <span className="font-thin">{email}</span>
+          </p>
 
-        <div className="flex gap-4 justify-start mb-5">
-          {otp.map((digit, index) => (
-            <input
-              key={index}
-              ref={(el) => (inputRefs.current[index] = el)}
-              id={`code-${index}`}
-              inputMode="numeric"
-              type="text"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(e, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              className={`w-12 h-12 sm:w-14 sm:h-14 text-center rounded-xl border outline-none text-xl font-semibold transition-colors ${
-                digit ? "border-[#98D9FC]" : "border-[#D8DADC]"
-              }`}
-            />
-          ))}
+          <div className="flex gap-4 justify-start mb-5">
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                ref={(el) => {
+                  inputRefs.current[index] = el;
+                }}
+                id={`code-${index}`}
+                inputMode="numeric"
+                type="text"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChange(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                className={`w-12 h-12 sm:w-14 sm:h-14 text-center rounded-xl border outline-none text-xl font-semibold transition-colors ${
+                  digit ? "border-[#98D9FC]" : "border-[#D8DADC]"
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="max-w-md flex justify-around items-center mb-6">
+            <label className="flex items-center space-x-2">
+              <div className="flex items-center font-thin text-xs">
+                <span>
+                  I didn&apos;t receive a code{" "}
+                  <a
+                    href="/forgot-password"
+                    className="text-blue-600 font-thin text-xs"
+                  >
+                    Resend
+                  </a>
+                </span>
+              </div>
+            </label>
+          </div>
+
+          {message && <p className="text-green-600 text-sm mb-4">{message}</p>}
+          {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+
+          <button
+            disabled={otp.some((d) => d === "")}
+            onClick={handleVerify}
+            className={`w-[50%] py-3 text-white rounded ${
+              otp.some((d) => d === "") ? "bg-[#E0E0E0]" : "bg-[#0794E2]"
+            }`}
+          >
+            Create Account
+          </button>
         </div>
-
-        <div className="max-w-md flex justify-around items-center mb-6">
-          <label className="flex items-center space-x-2">
-            <div className="flex items-center font-thin text-xs">
-              <span>
-                I didn't receive a code{" "}
-                <a
-                  href="/forgot-password"
-                  className="text-blue-600 font-thin text-xs"
-                >
-                  Resend
-                </a>
-              </span>
-            </div>
-          </label>
-        </div>
-
-        {message && <p className="text-green-600 text-sm mb-4">{message}</p>}
-        {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
-
-        <button
-          disabled={otp.some((d) => d === "")}
-          onClick={handleVerify}
-          className={`w-[50%] py-3 text-white rounded ${
-            otp.some((d) => d === "") ? "bg-[#E0E0E0]" : "bg-[#0794E2]"
-          }`}
-        >
-          Create Account
-        </button>
-            </div>
-
       </div>
     </div>
   );
