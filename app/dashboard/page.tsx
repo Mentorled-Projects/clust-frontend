@@ -132,12 +132,12 @@ export default function Dashboard() {
         </div>
         <hr className="border-gray-700 mb-4" />
         <nav className="space-y-4 text-sm">
-          <NavItem icon={<Menu />} label="Dashboard" sidebarOpen={sidebarOpen} />
-          <NavItem icon={<Calendar />} label="Events" sidebarOpen={sidebarOpen} />
-          <NavItem icon={<Users />} label="Groups" sidebarOpen={sidebarOpen} />
-          <NavItem icon={<Clock />} label="Rsvp" sidebarOpen={sidebarOpen} />
-          <NavItem icon={<Settings />} label="Settings" sidebarOpen={sidebarOpen} />
-          <NavItem icon={<HelpCircle />} label="Help" sidebarOpen={sidebarOpen} />
+          <NavItem icon={<Image src={"/image/DashboardMobile.svg"}width={20} height={30}   alt="Dashboard" />} label="Dashboard" sidebarOpen={sidebarOpen} />
+          <NavItem icon={<Image src={"/image/calendarMobile.svg"}width={20} height={30}  alt="Events" />} label="Events" sidebarOpen={sidebarOpen} />
+          <NavItem icon={<Image src={"/image/profile-2userMobile.svg"}width={20} height={30}  alt="Groups" />} label="Groups" sidebarOpen={sidebarOpen} />
+          <NavItem icon={<Image src={"/image/timerMobile.svg"}width={20} height={30} alt="Rsvp" />} label="Rsvp" sidebarOpen={sidebarOpen} />
+          <NavItem icon={<Image src={"/image/settingMobile.svg"}width={20} height={30} alt="Settings" />} label="Settings" sidebarOpen={sidebarOpen} />
+          <NavItem icon={<Image src={"/image/message-questionMobile.svg"}width={20} height={30}  alt="Dashboard" />} label="Help" sidebarOpen={sidebarOpen} />
         </nav>
       </aside>
 
@@ -271,7 +271,7 @@ export default function Dashboard() {
                         <div className="flex-1">
                           <p className="text-sm text-gray-700 mb-4">
                             <span className="font-bold">John,</span> you have been invited to{" "}
-                            <span className="font-bold">&quot;Music live concert"</span> secure
+                            <span className="font-bold">&quot;Music live concert&quot;</span> secure
                             <br />
                             <span>your spot now!</span>
                           </p>
@@ -317,8 +317,8 @@ export default function Dashboard() {
                         <div className="flex-1">
                           <p className=" text-gray-700 text-sm mb-4">
                             <span className="font-bold ">John,</span> your rsvp to{" "}
-                            <span className="font-bold">"Summer
-                              Beach Brunch"</span> is still pending.
+                            <span className="font-bold">&quot;Summer
+                              Beach Brunch&quot;</span> is still pending.
                             <br />
                             Kindly Confirm your attendance.
                           </p>
@@ -339,7 +339,7 @@ export default function Dashboard() {
                         <div className="flex-1 ">
                           <p className=" text-gray-700 text-sm mb-4">
                             <span className="font-bold">John,</span> you have been invited to{" "}
-                            <span className="font-bold">"Fitness Fest 2025"
+                            <span className="font-bold">&quot;Fitness Fest 2025&quot;
                             </span> secure
                             <br />
                             <span>  your spot now!</span>
@@ -382,7 +382,7 @@ export default function Dashboard() {
                         <div className="flex-1">
                           <p className=" text-gray-700 text-sm mb-1 ">
                             <span className="font-bold">John,</span> your rsvp to{" "}
-                            <span className="font-bold">"Summer Beach Brunch"</span> is still pending.
+                            <span className="font-bold">&quot;Summer Beach Brunch&quot;</span> is still pending.
                             <br />
                             Kindly Confirm your attendance.
                           </p>
@@ -595,7 +595,7 @@ export default function Dashboard() {
               Events Happening Near You
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {events.map((item, i) => (
+              {events.map((item: {icon: string; label: string }, i) => (
                 <div key={i} className="bg-white border-[#252C2B] p-5 rounded-lg">
                   <div className="relative">
                     <Image
