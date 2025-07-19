@@ -55,7 +55,7 @@ export default function TicketSummaryPage() {
 
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Left Panel */}
-            <div className="flex-1 border rounded-lg p-4 space-y-4">
+            <div className="flex-1 shadow-sm rounded-lg p-4 space-y-4">
               <div className="flex justify-end gap-5">
                 <div className="flex gap-1 items-center text-blue-400 cursor-pointer" onClick={() => router.back()}>
                   <Edit size={14} /> <p className='text-xs'>Edit</p>
@@ -69,10 +69,10 @@ export default function TicketSummaryPage() {
                 <Image src="/image/Frame 2147225578.png" alt="Event" width={80} height={80} className="rounded" />
                 <div className="space-y-1">
                   <h3 className="font-semibold">Disco Party</h3>
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                  <div className="flex items-center gap-1 text-xs text-gray-600">
                     <Calendar size={14} /> <p>22nd January 2025 · 9:00pm</p>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                  <div className="flex items-center gap-1 text-xs text-gray-600">
                     <MapPin size={14} /> <p>Johnson Jakande Tinubu</p>
                   </div>
                 </div>
@@ -81,7 +81,7 @@ export default function TicketSummaryPage() {
               <div>
                 <h3 className="font-semibold mb-2">Steps</h3>
               <ul className="mt-2 space-y-2 text-sm">
-  <li className="flex gap-2 items-center">
+  <li className="flex gap-2 text-xs items-center">
     <input
       type="radio"
       name="eventStep"
@@ -92,7 +92,7 @@ export default function TicketSummaryPage() {
     />
     Build event page
   </li>
-  <li className="flex gap-2 items-center">
+  <li className="flex gap-2 text-xs items-center">
     <input
       type="radio"
       name="eventStep"
@@ -103,7 +103,7 @@ export default function TicketSummaryPage() {
     />
     Add ticket
   </li>
-  <li className="flex gap-2 items-center">
+  <li className="flex gap-2 text-xs items-center">
     <input
       type="radio"
       name="eventStep"
