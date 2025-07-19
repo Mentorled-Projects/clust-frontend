@@ -4,6 +4,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, CheckCircle,  XCircle } from 'lucide-react'
+import React from 'react'
 
 export default function ResetPassword() {
   const router = useRouter()
@@ -38,9 +39,9 @@ export default function ResetPassword() {
     }
   }
 
-    function handleContinue(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        throw new Error('Function not implemented.')
-    }
+   function handleContinue(event: React.MouseEvent<HTMLButtonElement>): void {
+  console.log("Continue button clicked");
+}
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
@@ -118,7 +119,7 @@ export default function ResetPassword() {
 
           {/**sign in link */}
           <p className="text-center text-xs text-gray-600 mb-6">
-                       Don't have an account?{' '}
+                       Don&apos;t have an account?{' '}
                        <a href="/signin" className="text-[#0794E2] font-medium">
                        Sign up
                        </a>
