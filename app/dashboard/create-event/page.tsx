@@ -1,11 +1,14 @@
-/* eslint-disable react/jsx-no-undef */
+
 "use client"
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Check, ChevronDown, ChevronUp, Crown, MapPin } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { faqData } from "../../assets/data"
+import { faqData, eventMaterials } from "../../assets/data"
+import {  Download,  ChevronLeft, Loader2 } from "lucide-react"
+
+
 import {
   Menu,
   X,
@@ -35,12 +38,25 @@ export default function EventPage() {
   const router = useRouter()
   const [showOrganizerModal, setShowOrganizerModal] = useState(false)
   const [openFAQs, setOpenFAQs] = useState({})
-
+  const [rsvpLoading, setRsvpLoading] = useState(false);
+  const [rsvpConfirmed, setRsvpConfirmed] = useState(false);
+  const [guestCount, setGuestCount] = useState(0);
+  const [ticketLoading, setTicketLoading] = useState(false);
+const [getTicketLoading, setGetTicketLoading] = useState(false);
   const toggleModal = () => {
     document.body.style.overflow = "hidden"
     setShowOrganizerModal(!showOrganizerModal)
   }
 
+    const handleConfirmRSVP = () => {
+    setRsvpLoading(true);
+    setTimeout(() => {
+      setRsvpLoading(false);
+      setRsvpConfirmed(true);
+    }, 1500);
+  };
+
+  
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -69,6 +85,18 @@ export default function EventPage() {
     }))
   }
 
+
+
+
+const handleGetTicket = () => {
+  setGetTicketLoading(true);
+  setTimeout(() => {
+    setGetTicketLoading(false);
+    window.location.href = "/contact-information";
+  }, 1500);
+};
+
+
   const toggleNotification = () => {
     if (!isMobile) {
       document.body.style.overflow = "hidden"
@@ -86,12 +114,31 @@ export default function EventPage() {
     router.push("/tickets")
   }
 
+  // const handleRSVPConfirm = () => {
+  //   if (rsvpStatus === "confirm") {
+  //     setShowConfirmation(true)
+  //     setTimeout(() => setShowConfirmation(false), 3000)
+  //   }
+  // }
+  // const handleRSVPConfirm = () => {
+  //   if (rsvpStatus === "confirm") {
+  //     rsvpConfirmed(true)
+  //     setTimeout(() => setShowConfirmation(false), 3000)
+  //   }
+  // }
+
   const handleRSVPConfirm = () => {
-    if (rsvpStatus === "confirm") {
-      setShowConfirmation(true)
-      setTimeout(() => setShowConfirmation(false), 3000)
-    }
-  }
+  if (!rsvpStatus) return;
+
+  setRsvpLoading(true);
+
+  setTimeout(() => {
+    setRsvpConfirmed(true);   
+    setRsvpLoading(false);   
+  }, 1500);
+};
+
+
 
   const closeSidebarOnMobile = () => {
     if (isMobile) {
@@ -100,7 +147,7 @@ export default function EventPage() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white text-white">
+    <div className="flex min-h-screen flex-col overflow-hidden bg-white text-white">
       {sidebarOpen && isMobile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
@@ -148,7 +195,13 @@ export default function EventPage() {
         )}
 
         {/* for the topbar */}
-        <nav className="flex items-center justify-between border-b p-2 sm:p-4 bg-white">
+        <nav className="flex items-center justify-between  border-b p-2 sm:p-5 bg-white">
+           <div className="flex items-center justify-between mb-1">
+        <button onClick={() => router.push('/dashboard')} className="text-black">
+                    <Image src={"/image/Frame 2147224774.svg"} alt="previous-tab" width={40} height={50} />     
+                       </button>
+    
+      </div>
           <div className="hidden md:flex items-center border border-[#EFEFEF] rounded-full px-3 py-2.5 flex-1 max-w-md mx-4">
             <FiSearch className="mr-2 text-xs text-[#C8CCD0]" />
             <input
@@ -233,7 +286,7 @@ export default function EventPage() {
 
             {/* for the user dropdown */}
             <div className="flex items-center gap-1 sm:gap-2 relative">
-              <FaUserCircle size={isMobile ? 20 : 24} />   {/**an image is supposed to be here */}
+              <Image src={'/image/navPics.svg'} width={30} height={30} alt="navPics"/>
               <div className="hidden sm:block">
                 <p className="text-xs text-black">John</p>
                 <p className="text-xs text-[#595959]">JohnFavor@gmail.com</p>
@@ -242,7 +295,6 @@ export default function EventPage() {
                 className="cursor-pointer w-3 h-3 text-black sm:w-4 sm:h-4"
                 onClick={() => setDropdownOpen((prev) => !prev)}
               />
-
               {dropdownOpen && (
                 <div className="absolute top-full right-0 bg-white shadow-lg mt-2 w-48 rounded-lg z-50 p-2">
                   <h3 className="hover:bg-blue-100 text-[#595959] text-sm rounded px-3 py-2 cursor-pointer">
@@ -318,12 +370,12 @@ export default function EventPage() {
             <div className="flex-1 order-2 lg:order-1">
               <div className="space-y-6 sm:space-y-8">
                 <div>
-                  <h1 className="text-2xl sm:text-2xl font-bold mb-3 sm:mb-4 text-black">About Event</h1>
-                  <p className="text-black mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
+                  <h1 className="text-2xl sm:text-base font-semibold mb-3 sm:mb-4 text-black">About Event</h1>
+                  <p className="text-black mb-6 sm:mb-8 text-sm sm:text-xs leading-relaxed">
                     Get ready for an unforgettable night of music, energy, and pure vibes at Soundwave
                     <br/>
                      Live 2025 the
-                    city's biggest outdoor music concert! Join us as we bring together 
+                    city&apos;s biggest outdoor music concert! Join us as we bring together 
                     <br/>
                     some of the hottest artists,
                     emerging talents, and surprise guest performers for a 
@@ -336,15 +388,15 @@ export default function EventPage() {
                     <br/>
                     going. 
                     <br/>
-                    Whether you're a lover of afrobeats, hip-hop, indie, or dance music — this event
+                    Whether you&apos;re a lover of afrobeats, hip-hop, indie, or dance music — this event
                     <br/>
-                    promises something for everyone. Don't miss your chance to vibe with fellow music
+                    promises something for everyone. Don&apos;t miss your chance to vibe with fellow music
                     <br/>
                      lovers under the
                     stars and be part of a concert night to remember.
                   </p>
 
-                  <h1 className="text-2xl sm:text-2xl font-bold mb-3 sm:mb-4 text-black">Organizer</h1>
+                  <h1 className="text-2xl sm:text-base font-bold mb-3 sm:mb-4 text-black">Organizer</h1>
                   <div className="bg-gray-100 p-7 sm:w-[90%] sm:p-4 rounded-lg mb-4 sm:mb-6">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                       <div className="flex items-center space-x-3 sm:space-x-4">
@@ -356,7 +408,7 @@ export default function EventPage() {
                     className="sm:w-[50px] sm:h-[50px]"
                   />
                         <div>
-                          <h3 className="font-thin text-black text-sm sm:text-base">
+                          <h3 className="font-thin text-black text-sm sm:text-xs">
                             By Mainland Block Club • 224 followers
                           </h3>
                           <div className="flex items-center space-x-2 mt-1 sm:mt-2">
@@ -366,33 +418,33 @@ export default function EventPage() {
                           </div>
                         </div>
                       </div>
-                      <button className="bg-[#0794E2] hover:bg-blue-600 text-white px-3 sm:px-6 py-2 rounded-sm text-sm sm:text-base">
+                      <button className="bg-[#0794E2] hover:bg-blue-600 text-white px-3 sm:px-6 py-2 rounded-sm text-sm sm:text-xs">
                         Follow
                       </button>
                     </div>
                   </div>
 
-                  <h3 className="text-lg sm:text-2xl font-semibold mb-3 sm:mb-4 text-black">Event highlights</h3>
+                  <h3 className="text-lg sm:text-base font-semibold mb-3 sm:mb-4 text-black">Event highlights</h3>
                   <ul className="space-y-2 mb-4 sm:mb-6">
-                    <li className="flex items-start text-black text-sm sm:text-lg ">
+                    <li className="flex items-start text-black text-sm sm:text-xs ">
                       <span className="mr-2">•</span>
                       Live performances by top-charting and emerging artists
                     </li>
-                    <li className="flex items-start text-black text-sm sm:text-lg">
+                    <li className="flex items-start text-black text-sm sm:text-xs">
                       <span className="mr-2">•</span>
                       Stunning sunset viewing from exclusive vantage point
                     </li>
-                    <li className="flex items-start text-black text-sm sm:text-lg">
+                    <li className="flex items-start text-black text-sm sm:text-xs">
                       <span className="mr-2">•</span>
                         Surprise Guest Appearances you don’t want to miss            
                                 </li>
-                    <li className="flex items-start text-black text-sm sm:text-lg">
+                    <li className="flex items-start text-black text-sm sm:text-xs">
                       <span className="mr-2">•</span>
                          VIP Experience Lounge with media coverage          
                                    </li>
                   </ul>
 
-                  <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-black">Frequently asked questions</h2>
+                  <h2 className="text-xl sm:text-base font-bold mb-3 sm:mb-4 text-black">Frequently asked questions</h2>
 
                          <div className="space-y-4">
                     {faqData.map((faq, index) => (
@@ -401,16 +453,16 @@ export default function EventPage() {
                           onClick={() => toggleFAQ(faq.id)}
                           className="flex items-center justify-between w-full p-3 sm:p-4 text-left hover:bg-gray-50 transition-colors"
                         >
-                          <span className="font-medium text-black text-sm sm:text-base pr-4">{faq.question}</span>
+                          <span className="font-medium text-black text-sm sm:text-xs pr-4">{faq.question}</span>
                           {openFAQs[faq.id] ? (
-                            <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0" />
+                            <ChevronUp className="w-4 h-4 sm:w-4 sm:text-xs sm:h-4 text-black flex-shrink-0" />
                           ) : (
-                            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-black flex-shrink-0" />
+                            <ChevronDown className="w-4 h-4 sm:w-4  sm:h-4 text-black flex-shrink-0" />
                           )}
                         </button>
                         {openFAQs[faq.id] && (
                           <div className="p-3 sm:p-4 bg-gray-100 border-t border-gray-200">
-                            <p className="font-medium text-black text-sm sm:text-base">{faq.answer}</p>
+                            <p className="font-medium text-black text-sm sm:text-xs">{faq.answer}</p>
                           </div>
                         )}
                         <div className="w-full  bg-black-300 mt-2"></div>
@@ -422,7 +474,7 @@ export default function EventPage() {
             </div>
 
             {/* for the second div */}
-            <div className="w-full lg:w-80 order-1 lg:order-2">
+            {/* <div className="w-full lg:w-80 order-1 lg:order-2">
               <div className="lg:sticky lg:top-6 border bg-white rounded-lg shadow-lg p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 text-black">
                   Would you like to attend 
@@ -490,9 +542,155 @@ export default function EventPage() {
                   Confirm RSVP
                 </button>
               </div>
+            </div> */}
+
+
+            <div className="w-full lg:w-80 order-1 lg:order-2">
+  <div className="lg:sticky lg:top-6 border bg-white rounded-lg shadow-lg p-4 sm:p-6">
+    {!rsvpConfirmed ? (
+      <>
+        <h3 className="text-lg sm:text-xl font-semibold mb-2 text-black">
+          Would you like to attend <br /> this event?
+        </h3>
+        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-sm">
+          Your RSVP is pending by default
+        </p>
+
+        <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+          {["confirm", "decline", "remind"].map((option) => (
+            <label
+              key={option}
+              className={`flex items-center space-x-2 p-3 rounded-full border cursor-pointer ${
+                rsvpStatus === option
+                  ? option === "confirm"
+                    ? "bg-[#E7FFF0] border-green-200"
+                    : option === "decline"
+                    ? "bg-red-50 border-red-200"
+                    : "bg-yellow-50 border-yellow-200"
+                  : "border-black"
+              }`}
+            >
+              <input
+                type="radio"
+                name="rsvp"
+                value={option}
+                checked={rsvpStatus === option}
+                onChange={(e) => setRsvpStatus(e.target.value)}
+                className="text-black"
+              />
+              <span className="flex-1 capitalize text-black text-sm sm:text-xs">{option}</span>
+            </label>
+          ))}
+        </div>
+
+        <button
+          onClick={handleRSVPConfirm}
+          disabled={!rsvpStatus || rsvpLoading}
+          className={`w-full py-3 rounded-lg font-medium transition-colors text-sm sm:text-base flex justify-center items-center gap-2 ${
+            rsvpStatus
+              ? "bg-blue-500 hover:bg-blue-600 text-white"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+          style={{ backgroundColor: rsvpStatus ? "#0794E2" : "#E0E0E0" }}
+        >
+          {rsvpLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+          {rsvpLoading ? "Loading..." : "Confirm RSVP"}
+        </button>
+      </>
+    ) : (
+      <>
+        <h2 className="text-base flex flex-col items-center font-semibold mb-4 text-black">Reserve your spot!</h2>
+        <div className="border-[#222124] bg-white shadow-sm rounded-lg p-4 mb-4">
+          <div className="flex justify-between  items-center mb-2">
+            <h3 className="text-[#222124] text-sm sm:text-xs ">Number of Guests</h3>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setGuestCount((prev) => Math.max(0, prev - 1))}
+                className="w-10 h-10 bg-blue-500 text-white rounded-full text-xl"
+              >
+                -
+              </button>
+              <span>{guestCount}</span>
+              <button
+                onClick={() => setGuestCount((prev) => prev + 1)}
+                className="w-10 h-10 bg-blue-500 text-white rounded-full text-xl"
+              >
+                +
+              </button>
             </div>
           </div>
+            <hr className="my-2  border-[#222124]" />
 
+          <div className=" pt-2  text-[#222124] text-xs font-inter font-semibold">#5000</div>
+        </div>
+
+        <button
+          onClick={handleGetTicket}
+          className="w-full py-3 bg-blue-500 text-white text-xs rounded-lg flex items-center justify-center gap-2"
+        >
+          {getTicketLoading && <Loader2 className="w-4 h-4  animate-spin" />}
+          {getTicketLoading ? "Loading..." : "Get Ticket"}
+        </button>
+      </>
+    )}
+  </div>
+</div>
+
+          </div>
+
+                        {/* RSVP Button or Reservation Section     this is for the get ticket code */} 
+                   {/* {!rsvpConfirmed ? ( 
+        <div className="flex justify-center">
+          <button
+            onClick={handleConfirmRSVP}
+            disabled={rsvpLoading}
+            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg text-base"
+          >
+            {rsvpLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {rsvpLoading ? 'Loading...' : 'Confirm RSVP'}
+          </button>
+        </div>
+      ) : (
+        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold text-center mb-4">Reserve your spot!</h2>
+
+          <div className="border rounded-lg p-4 mb-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-base font-medium">Number of Guest</h3>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setGuestCount((prev) => Math.max(prev - 1, 0))}
+                  className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center"
+                >
+                  -
+                </button>
+                <span className="text-lg font-bold">{guestCount}</span>
+                <button
+                  onClick={() => setGuestCount((prev) => prev + 1)}
+                  className="bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <hr className="my-2" />
+            <h3 className="text-sm text-gray-500">#5000</h3>
+          </div>
+
+          <button
+            onClick={handleGetTicket}
+            disabled={ticketLoading}
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-lg"
+          >
+            {ticketLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {ticketLoading ? 'Loading...' : 'Get Ticket'}
+          </button>
+        </div> 
+      )} */}
+
+
+
+ 
           {/* Success Popup - Responsive positioning */}
           {showConfirmation && (
             <div
@@ -505,7 +703,7 @@ export default function EventPage() {
                   <Check className="w-3 h-3 sm:w-4 sm:h-4" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm sm:text-base">You're officially Confirmed</h3>
+                  <h3 className="font-semibold text-sm sm:text-base">You&apos;re officially Confirmed</h3>
                   <p className="text-xs sm:text-sm text-gray-300">Ticket sent to your email</p>
                 </div>
               </div>
@@ -514,6 +712,42 @@ export default function EventPage() {
 
         </main>
 
+
+
+                 <h1 className="text-2xl sm:text-base px-5 font-bold mb-4 text-black mt-8">Event Materials</h1>
+
+<div className="space-y-4">
+  {eventMaterials.map((material) => (
+    <div
+      key={material.id}
+      className="flex justify-between w-[70%] items-center border rounded-lg p-4 bg-white shadow-sm"
+    >
+      <div className="flex items-start space-x-3">
+        <div className="text-black mt-1">
+                 <Image src={'/image/document-text.svg'} width={20} height={30} alt="document-text"/>       
+
+ </div>
+        <div>
+          <h3 className="text-black font-medium text-sm sm:text-xs">
+            {material.title}
+          </h3>
+          <h3 className="text-gray-500 text-sm sm:text-xs">
+            {material.type} · {material.size}
+          </h3>
+        </div>
+      </div>
+      <a
+        href={material.fileUrl}
+        download
+        className="flex items-center space-x-2 text-sm text-[#2F2B36] border  border-[#E4E4E4] rounded-lg px-3 py-2.5 hover:bg-blue-50 transition-colors"
+      >
+          
+        <Download className="w-4 h-4" />
+        <h3 className="text-xs">Download</h3>
+      </a>
+    </div>
+  ))}
+</div>
 
 
           {/* Footer */}
@@ -631,7 +865,7 @@ export default function EventPage() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm sm:text-base text-gray-700">
                     <span className="font-bold">John,</span> you have been invited to{" "}
-                    <span className="font-bold">"Music live concert"</span> secure your spot now!
+                    <span className="font-bold">&quot;Music live concert&quot;</span> secure your spot now!
                   </p>
                 </div>
                 <button
@@ -662,6 +896,3 @@ function NavItem({ icon, label, sidebarOpen, onClick }) {
 
 
    
-
-
-
